@@ -7,31 +7,14 @@ import SignInPage from './SignIn';
 import PasswordForgetPage from './PasswordForget';
 import HomePage from './Home';
 import AccountPage from './Account';
-import { firebase } from '../firebase';
+import withAuthentication from './withAuthentication';
 
 import * as routes from '../constants/routes';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      authUser: null,
-    };
-  }
-
-  componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser => {
-      authUser
-        ? this.setState({ authUser })
-        : this.setState({ authUser: null });
-    });
-  }
-
-  render(){
-    return <Router>
+const App = () =>
+  <Router>
     <div className="App">
-    <Navigation authUser={this.state.authUser} />
+    <Navigation />
     <Route
         exact path={routes.LANDING}
         component={LandingPage}
@@ -58,7 +41,5 @@ class App extends React.Component {
       />
       </div>
   </Router>
-  }
-}
 
-export default App;
+export default withAuthentication(App);
